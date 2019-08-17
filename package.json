@@ -1,0 +1,59 @@
+{
+  "name": "jest-color",
+  "version": "0.0.0",
+  "main": "dist/jest-color.cjs.js",
+  "description": "A bundle of Jest matchers for testing and asserting colors",
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "test:ci": "jest --ci",
+    "test:watch": "jest --watch \"src/.*(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$\"",
+    "test:integ": "rollup -c && jest \"test/.*.[jt]sx?$\"",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint --ignore-path .gitignore .",
+    "lint:fix": "eslint --fix --ignore-path .gitignore .",
+    "format": "prettier --ignore-path .gitignore --write '**/*.js'",
+    "format:check": "prettier --ignore-path .gitignore --check '**/*.{js,jsx,mjs}'",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "jest",
+    "matchers",
+    "color",
+    "testing"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mathspy/jest-color.git"
+  },
+  "author": "Mathspy <mathspy257@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^22.15.1",
+    "husky": "^3.0.4",
+    "jest": "^24.8.0",
+    "prettier": "^1.18.2",
+    "pretty-quick": "^1.11.1",
+    "rollup": "^1.19.4",
+    "rollup-plugin-babel": "^4.3.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "dependencies": {
+    "color": "^3.1.2",
+    "color-diff": "^1.1.0",
+    "jest-matcher-utils": "^24.8.0"
+  }
+}

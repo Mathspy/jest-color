@@ -1,0 +1,91 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+  - master
+
+pr:
+  - master
+
+jobs:
+  - job: build
+    pool:
+      vmImage: "ubuntu-16.04"
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "10.x"
+        displayName: "Install Node.js"
+
+      - script: |
+          npm install
+        displayName: "Installing dependencies"
+
+      - script: |
+          npm run build
+        displayName: "Building library!"
+
+      - task: PublishBuildArtifacts@1
+        displayName: "Storing library for other jobs"
+        inputs:
+          pathtoPublish: $(System.DefaultWorkingDirectory)/dist
+          artifactName: dist
+
+  - job: tests
+    pool:
+      vmImage: "ubuntu-16.04"
+    dependsOn: build
+    steps:
+      - task: DownloadBuildArtifacts@0
+        displayName: "Loading stored library"
+        inputs:
+          artifactName: dist
+          downloadPath: $(System.DefaultWorkingDirectory)
+
+      - script: |
+          npm install
+        displayName: "Installing dependencies"
+
+      - script: |
+          npm run test:ci
+        displayName: "Running unit and integration tests"
+
+  - job: format
+    pool:
+      vmImage: "ubuntu-16.04"
+    dependsOn: build
+    steps:
+      - task: DownloadBuildArtifacts@0
+        displayName: "Loading stored library"
+        inputs:
+          artifactName: dist
+          downloadPath: $(System.DefaultWorkingDirectory)
+
+      - script: |
+          npm install
+        displayName: "Installing dependencies"
+
+      - script: |
+          npm run format:check
+        displayName: "Ensuring prettier styles are applied"
+
+  - job: lint
+    pool:
+      vmImage: "ubuntu-16.04"
+    dependsOn: build
+    steps:
+      - task: DownloadBuildArtifacts@0
+        displayName: "Loading stored library"
+        inputs:
+          artifactName: dist
+          downloadPath: $(System.DefaultWorkingDirectory)
+
+      - script: |
+          npm install
+        displayName: "Installing dependencies"
+
+      - script: |
+          npm run lint
+        displayName: "Linting all files"
