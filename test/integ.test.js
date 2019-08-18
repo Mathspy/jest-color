@@ -10,4 +10,12 @@ describe("All jest-color matchers should be there", () => {
 
     expect("hsla(114, 60%, 39%, 0.32)").toEqual(expect.not.color(0, 0, 0, 0));
   });
+
+  test("indistinguishable", () => {
+    expect("#329e26").toBeIndistinguishableFrom(49, 155, 37);
+
+    expect("#329e26").toEqual(expect.indistinguishableFrom(49, 155, 37));
+
+    expect("#329e00").toEqual(expect.not.indistinguishableFrom(49, 155, 37));
+  });
 });
